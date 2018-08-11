@@ -1,0 +1,136 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Replacer</title>
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/listview.js"></script>
+    <script>
+$(function() {
+    selectView(0);
+});
+function selectView(index) {
+    $(".view").hide();
+    $(".view:eq("+index+")").show();
+}
+
+var listFile;
+$(function() {
+    listFile = $("#listFile");
+});
+function addFile(file) {
+    listFile.append($("<li>").text(file));
+}
+function getFiles() {
+    var files = [];
+    listFile.find("li").each(function() {
+        files.push($(this).text());
+    });
+    // 파일명에 ?는 들어갈 수 없으므로 구분자로 사용
+    return files.join("?");
+}
+function clearFiles() {
+    listFile.empty();
+}
+
+var listReplacer;
+$(function() {
+    listReplacer = $("#listReplacer");
+
+    if (window.external.LoadDefaultReplacers) window.external.LoadDefaultReplacers();
+});
+function setReplacer(v1, v2) {
+    $("#v1").val(v1);
+    $("#v2").val(v2);
+}
+function getReplacer() {
+    var v1 = $("#v1").val();
+    var v2 = $("#v2").val();
+    return JSON.stringify([v1, v2]);
+}
+
+$(function() {
+    $("#view1left, #view1right").on("click", function() {
+        selectView(0);
+    });
+});
+    </script>
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <link rel="stylesheet" type="text/css" href="css/listview.css" />
+    <style>
+        #view0left, #view0right {
+            float: left;
+            margin: 2px;
+        }
+        #view0left, #view0right {
+            height: calc(100% - 36px);
+        }
+        #view0left  { width: calc(30% - 4px); }
+        #view0right { width: calc(70% - 4px); }
+
+        #listFile {
+            width: calc(100% - 2px);
+            height: calc(100% - 2px);
+        }
+
+        #areaReplacer {
+            width: calc(100% - 2px);
+            height: calc(100% - 2px);
+            overflow-y: scroll;
+            border: 1px solid #000;
+        }
+
+        #listReplacer > li {
+            width: 100%;
+            height: 100%;
+        }
+
+        #view0right > * {
+        }
+
+        #view0right > textarea {
+            width: calc(50% - 10px);
+            height: calc(100% - 2px);
+            overflow-x: hidden;
+            overflow-y: scroll;
+            line-height: 14px;
+            white-space: pre;
+        }
+
+        #view0right > span {
+            display: inline-block;
+            width: 16px;
+            margin-top: 33%;
+            text-align: center;
+            vertical-align: top;
+        }
+
+        #areaSubmit {
+            clear: both;
+            width: 100%;
+            height: 32px;
+        }
+
+        #btnSubmit {
+            width: calc(100% - 4px);
+            height: calc(100% - 4px);
+            margin: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="view">
+        <div id="view0left">
+            <ol id="listFile" class="list-selectable" for="filetest"></ol>
+        </div>
+        <div id="view0right">
+            <textarea id="v1" wrap="off"></textarea><span>→</span><textarea id="v2" wrap="off"></textarea>
+        </div>
+        <div id="areaSubmit">
+            <button id="btnSubmit">변환</button>
+        </div>
+    </div>
+</body>
+</html>
